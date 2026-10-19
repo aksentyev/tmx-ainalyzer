@@ -45,7 +45,7 @@
         │
         └── потребители 5 V: MAX98357A VIN, ZE07 Vin (через D2, лист 6)
 
-  +3V3 потребители: ADS1115, SCD30, TMP117, BMP390, ICS-43434, ST7789, подтяжки, лесенка кнопок
+  +3V3 потребители: ADS1115, SCD30, TMP117, BMP390, ICS-43434, LCD ST7567, подтяжки, лесенка кнопок
 ```
 
 Пояснения:
@@ -73,11 +73,11 @@
        I2S_BCLK ─────┤ GPIO6                  GPIO7 ├───── NC (JTAG strap)
    PAD_COMP0 рез.────┤ GPIO8                  GPIO9 ├───── PAD_COMP1 резерв
          I2S_WS ─────┤ GPIO10                GPIO11 ├───── UART_TX_ZE   (→ делитель → ZE07 RXD)
-         TFT_BL ─────┤ GPIO12                GPIO13 ├───── USB D− (на плате)
+         LCD_BL ─────┤ GPIO12                GPIO13 ├───── USB D− (на плате)
                      │                       GPIO14 ├───── USB D+ (на плате)
      I2S_SD_MIC ─────┤ GPIO23                GPIO24 ├───── I2S_SD_AMP
-       SPI_MOSI ─────┤ GPIO25                GPIO26 ├───── TFT_DC
-        TFT_RST ─────┤ GPIO27                GPIO28 ├───── NC (BOOT)
+       SPI_MOSI ─────┤ GPIO25                GPIO26 ├───── LCD_DC
+        LCD_RST ─────┤ GPIO27                GPIO28 ├───── NC (BOOT)
                      │  USB-C: консоль/прошивка      │
                      └──────────────────────────────┘
 ```
@@ -208,15 +208,18 @@ PIN8 TXD (0–3.0 V); PIN10 DAC 0.4–2 V (не используем); оста�
 ## Лист 7 — UI: дисплей и кнопки
 
 ```
-  ST7789 1.69" 240×280 SPI (8-pin модуль)
+  LCD ST7567 128×64, SPI 4-wire, трансфлективный (GMG12864-06D / ERC12864, 3.3 V)
       GND ── GND
       VCC ── +3V3
-      SCL ── SPI_SCK   (GPIO3)
-      SDA ── SPI_MOSI  (GPIO25)
-      RES ── TFT_RST   (GPIO27)
-      DC  ── TFT_DC    (GPIO26)
-      CS  ── GND       (единственный slave)
-      BLK ── TFT_BL    (GPIO12, PWM)  — или на +3V3 в v1
+      SCL/SCK ── SPI_SCK   (GPIO3)
+      SI/SDA  ── SPI_MOSI  (GPIO25)
+      RSE/RST ── LCD_RST   (GPIO27)
+      RS/A0   ── LCD_DC    (GPIO26)
+      CS      ── GND       (единственный slave; если модуль не терпит — на свободный GPIO)
+      LED+/BL ── R33 (по току подсветки модуля, обычно уже стоит) ── LCD_BL (GPIO12, PWM)
+      LED−    ── GND
+  Названия пинов у модулей гуляют (SCL/SCK, SI/SDA, RSE/RST, RS/A0) — сверять с шелкографией.
+  Контраст (регистр EV) зависит от температуры — компенсировать по TMP117/BMP390.
 
   Кнопки, резисторная лесенка на ADC1_CH3:
 
@@ -239,11 +242,11 @@ PIN8 TXD (0–3.0 V); PIN10 DAC 0.4–2 V (не используем); оста�
 
 | Цепь | Подключения |
 |---|---|
-| GND | все модули; минус АКБ через TP4056 B−/OUT−; ячейка O2 (−) через R4-узел; ZE07 PIN5, PIN14; TFT CS; ICS L/R; ADS1115 ADDR; SCD30 SEL; C1, C2, C3-узел, C30, R12, R30 |
+| GND | все модули; минус АКБ через TP4056 B−/OUT−; ячейка O2 (−) через R4-узел; ZE07 PIN5, PIN14; LCD CS, LED−; ICS L/R; ADS1115 ADDR; SCD30 SEL; C1, C2, C3-узел, C30, R12, R30 |
 | +VBAT | TP4056 OUT+ → SW1 → U1 VIN, U4 VIN |
 | +5V | U1 VOUT; C1; U2 IN; D1 анод; MAX98357A VIN, R23, R24; ZE07 PIN15 (без D2, см. лист 6) |
 | DEVKIT_5V | D1 катод → девкит «5V» |
-| +3V3 | U2 OUT; C2; ADS1115 VDD; SCD30 VDD; TMP117 V+ и ADD0; BMP390 VIN; ICS-43434 VDD; TFT VCC; R1, R2; SW_A/B/C |
+| +3V3 | U2 OUT; C2; ADS1115 VDD; SCD30 VDD; TMP117 V+ и ADD0; BMP390 VIN; ICS-43434 VDD; LCD VCC; R1, R2; SW_A/B/C |
 | SDA | GPIO0; R1; ADS1115, SCD30, TMP117, BMP390, MAX17048 SDA |
 | SCL | GPIO1; R2; те же SCL |
 | O2_P | ячейка (+) → R3 |
@@ -257,11 +260,11 @@ PIN8 TXD (0–3.0 V); PIN10 DAC 0.4–2 V (не используем); оста�
 | SPK+, SPK− | MAX98357A +/− → динамик |
 | UART_TX_ZE | GPIO11 → R11 → узел (R12→GND) → ZE07 PIN7 |
 | UART_RX_ZE | ZE07 PIN8 → R10 → GPIO2 |
-| SPI_SCK | GPIO3 → TFT SCL |
-| SPI_MOSI | GPIO25 → TFT SDA |
-| TFT_DC | GPIO26 → TFT DC |
-| TFT_RST | GPIO27 → TFT RES |
-| TFT_BL | GPIO12 → TFT BLK |
+| SPI_SCK | GPIO3 → LCD SCK |
+| SPI_MOSI | GPIO25 → LCD SI |
+| LCD_DC | GPIO26 → LCD RS/A0 |
+| LCD_RST | GPIO27 → LCD RST |
+| LCD_BL | GPIO12 → LCD LED+ (через R33) |
 | ADC_BTN | GPIO4; R30, C30; SW_A/0 Ω, SW_B/R31, SW_C/R32 |
 
 ## Перечень дискретных компонентов схемы
@@ -292,12 +295,12 @@ PIN8 TXD (0–3.0 V); PIN10 DAC 0.4–2 V (не используем); оста�
 | Потребитель | Шина | Типично | Пик |
 |---|---|---|---|
 | ESP32-C5 (BLE активен) | 5V девкита | 80–120 mA | 350 mA |
-| ST7789 + подсветка | +3V3 | 40 mA | 60 mA |
+| LCD ST7567 (1 mA) + подсветка | +3V3 | 1–30 mA | 40 mA |
 | SCD30 | +3V3 | 19 mA | 75 mA |
 | ADS1115, TMP117, BMP390, MAX17048, ICS-43434 | +3V3 | <5 mA | — |
 | MAX98357A + динамик 20 мм (чирп, −6 dB) | +5V | 50 mA | 300 mA (импульс) |
 | ZE07-CO | +5V | 5 mA | 10 mA |
-| **Итого с +5V** (включая LDO) | | ~250 mA | ~750 mA |
+| **Итого с +5V** (включая LDO) | | ~220 mA | ~730 mA |
 | **Со стороны АКБ** (boost КПД 85 %, 3.7 V) | | ~400 mA | ~1.2 A |
 
 18650 2500–3000 mAh → 5–7 ч непрерывной работы, с выключенной подсветкой больше. Полифьюз
@@ -314,6 +317,6 @@ PIN8 TXD (0–3.0 V); PIN10 DAC 0.4–2 V (не используем); оста�
 | BMP390 | JST-PH 4 | VIN, GND, SDA, SCL | ~10 см | камера O2 |
 | SCD30 | JST-PH 4 (+ SEL на GND внутри колпака) | VDD, GND, SDA, SCL | ~10 см | колпак SCD30 |
 | ZE07 | JST-XH 4 с ключом | Vin, GND, RXD, TXD | ~10 см | колпак ZE07 |
-| Дисплей | 8-pin Dupont / пайка | | ~8 см | крышка |
+| Дисплей | 8-pin Dupont / пайка | GND, VCC, SCK, SI, RST, RS, CS, BL | ~8 см | крышка |
 | Кнопки | 4 провода | +3V3, A, B, C | ~8 см | крышка |
 | АКБ | XH 2 | +, − | | холдер |
