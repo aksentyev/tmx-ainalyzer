@@ -33,7 +33,7 @@ docs/
     layout.md              компоновка корпуса (зонирование) + layout-v1.svg/png
     shopping-list.md       список покупок в две волны
   firmware/
-    notes.md               требования к прошивке, вытекшие из железа (I2S, SCD30, ZE07, Кирхгоф…)
+    notes.md               требования к прошивке, вытекшие из железа (I2S, SCD30, ZE15, Кирхгоф…)
 hardware/
   scad/                    OpenSCAD-модели печатных деталей, params.scad, render.sh, README.md
   stl/                     (не коммитится) результат render.sh

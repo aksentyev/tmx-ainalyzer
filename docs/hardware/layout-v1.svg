@@ -68,9 +68,9 @@
     <text x="50" y="202" fill="#a33">AMS1117-3.3 · SW1</text>
     <text x="50" y="222" font-size="9" fill="#a33">(горячее — подальше</text>
     <text x="50" y="234" font-size="9" fill="#a33">от торца B с TMP117)</text>
-    <!-- ZE07 cap X 70-110, Y 48-83 -> y 168..308 -->
+    <!-- ZE15 cap X 70-110, Y 48-83 -> y 168..308 -->
     <rect x="280" y="168" width="160" height="140" fill="#e8f0e8" stroke="#3a6" stroke-width="1.5" rx="4"/>
-    <text x="300" y="230" font-weight="bold" fill="#285">колпак ZE07-CO</text>
+    <text x="300" y="230" font-weight="bold" fill="#285">колпак ZE15-CO</text>
     <text x="300" y="246" fill="#285">40 × 35, диффуз.</text>
     <!-- SCD30 cap X 115-155, Y 50-80 -> y 180..300 -->
     <rect x="460" y="180" width="160" height="120" fill="#e8f0e8" stroke="#3a6" stroke-width="1.5" rx="4"/>
@@ -96,7 +96,7 @@
     <!-- perfboard X 165-225, Y 4-44 -> y 324..484 -->
     <rect x="660" y="324" width="240" height="160" fill="#fff6dc" stroke="#a80" stroke-width="1.5"/>
     <text x="676" y="346" font-weight="bold" fill="#860">перфоплата 60 × 40</text>
-    <text x="676" y="362" fill="#860">ADS1115 · MAX17048</text>
+    <text x="676" y="362" fill="#860">ADS1115 · LP5907</text>
     <text x="676" y="378" fill="#860">MAX98357A · обвязка</text>
     <text x="676" y="394" fill="#860">JST-PH под жгуты</text>
 
@@ -177,7 +177,7 @@
     <rect x="490" y="0" width="14" height="10" fill="#fff6dc" stroke="#a80"/><text x="510" y="9">перфоплата</text>
     <line x1="600" y1="5" x2="630" y2="5" stroke="#d9480f" stroke-width="3"/><text x="636" y="9">газ</text>
     <rect x="680" y="0" width="14" height="10" fill="none" stroke="#246" stroke-dasharray="4 3"/><text x="700" y="9">на крышке</text>
-    <text x="0" y="30" fill="#555">Тракт: вход → змеевик → порт A → трубка → порт B → камера O2 (+BMP390) → SCD30 → ZE07 → выхлоп. Вход и выхлоп — на левой стенке.</text>
+    <text x="0" y="30" fill="#555">Тракт: вход → змеевик → порт A → трубка → порт B → камера O2 (+BMP390) → SCD30 → ZE15 → выхлоп. Вход и выхлоп — на левой стенке.</text>
     <text x="0" y="46" fill="#555">Источник: docs/hardware/layout.md. Размеры ±5 мм до обмера реальных модулей.</text>
   </g>
 </svg>
