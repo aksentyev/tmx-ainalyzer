@@ -40,7 +40,7 @@
     <!-- tube X 17-197, dia 25 -> Y 95.5..120.5  => svg y = (125-120.5)*4=18 .. (125-95.5)*4=118 -->
     <rect x="68" y="18" width="720" height="100" fill="#dfe6ee" stroke="#2b3f55" stroke-width="2"/>
     <line x1="68" y1="68" x2="788" y2="68" stroke="#2b3f55" stroke-dasharray="8 4" stroke-width="1"/>
-    <text x="330" y="63" font-size="12" font-weight="bold" fill="#2b3f55">трубка Al Ø25 × 180, L_ак = 150</text>
+    <text x="330" y="63" font-size="12" font-weight="bold" fill="#2b3f55">трубка Cu Ø25 × 180, L_ак = 150</text>
     <text x="330" y="80" font-size="10" fill="#2b3f55">ось Y = 108, Z = 24</text>
     <text x="104" y="63" font-size="10" fill="#7a4a12" font-weight="bold">змеевик</text>
     <text x="104" y="76" font-size="9" fill="#7a4a12">Cu Ø4 × 50 см</text>
